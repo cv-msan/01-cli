@@ -7,8 +7,12 @@ fn main() -> anyhow::Result<()> {
     match opts.cmd {
         //这里的opts是随便定义的代表的CsvOpts实例变量
         SubCommand::Csv(opts) => {
-            //此处返回值为Result类型所以要?处理掉
-            process_csv(&opts.input, &opts.output)?;
+            let output = if let Some(output) = opts.output {
+                output.clone()
+            } else {
+                format!("output.{}", opts.format)
+            };
+            process_csv(&opts.input, output, opts.format)?;
         }
     }
     Ok(())
